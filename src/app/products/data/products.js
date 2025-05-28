@@ -1,0 +1,42 @@
+export const productsDB = [
+    {
+        id: 1,
+        name: "DayZ",
+        slug: "dayz",
+        description: "DayZ es un juego de supervivencia multijugador de mundo abierto ambientado en un mundo post-apocalíptico.",
+        price: 29.99,
+        category: "survival",
+        image: "/dayz.jpg",
+        stock: 5,
+    },
+    {
+        id: 2,
+        name: "SCUM",
+        slug: "scum",
+        description: "SCUM es un juego de supervivencia multijugador de mundo abierto que combina elementos de supervivencia, creación y rol.",
+        price: 34.99,
+        category: "survival",
+        image: "/scum.jpg",
+        stock: 5,
+    },
+    {
+        id: 3,
+        name: "Vein",
+        slug: "vein",
+        description: "Vein es un juego de terror y supervivencia que tiene lugar en un mundo oscuro y tenebroso lleno de criaturas aterradoras.",
+        price: 19.99,
+        category: "survival",
+        image: "/vein.png",
+        stock: 5,
+    },
+    {
+        id: 4,
+        name: "Hell Let Loose",
+        slug: "hell-let-loose",
+        description: "Hell Let Loose es un shooter multijugador en primera persona realista ambientado en la Segunda Guerra Mundial, con batallas a gran escala y jugabilidad estratégica.",
+        price: 39.99,
+        category: "shooter",
+        image: "/hll.png",
+        stock: 5,
+    }
+]
