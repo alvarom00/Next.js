@@ -1,24 +1,43 @@
-'use client';
-
-import { useState, useEffect } from 'react';
+"use client"
+import { useCartContext } from "@/context/CartContext"
+import { useEffect, useState } from "react"
+import { Spinner } from "@/components/Spinner/Spinner"
 
 export default function CartPage() {
-  const [cart, setCart] = useState([]);
+  const { cart, removeFromCart } = useCartContext()
+  const [loadingId, setLoadingId] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const storedCart = JSON.parse(localStorage.getItem('cart')) || [];
-    setCart(storedCart);
-  }, []);
+    const timeout = setTimeout(() => {
+      setIsLoading(false)
+    }, 1200)
+    return () => clearTimeout(timeout)
+  }, [])
 
-  const handleRemoveItem = (productId) => {
-    const updatedCart = cart.filter((item) => item.id !== productId);
-    setCart(updatedCart);
-    localStorage.setItem('cart', JSON.stringify(updatedCart));
-  };
+  const [globalLoading, setGlobalLoading] = useState(false)
+
+  const handleRemove = async (id) => {
+    if (globalLoading) return // Bloquea todas las interacciones mientras se elimina
+
+    setGlobalLoading(true) // Bloquea interacciones
+    await removeFromCart(id)
+    setGlobalLoading(false) // Permite interacciones nuevamente
+  }
 
   const calculateTotal = () => {
-    return cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
-  };
+    return cart
+      .reduce((total, item) => total + item.price * item.quantity, 0)
+      .toFixed(2)
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Spinner />
+      </div>
+    )
+  }
 
   return (
     <div className="p-6">
@@ -40,18 +59,21 @@ export default function CartPage() {
                   </p>
                 </div>
                 <button
-                  onClick={() => handleRemoveItem(item.id)}
-                  className="bg-red-500 text-white px-4 py-2 rounded"
+                  onClick={() => handleRemove(item.id)}
+                  disabled={loadingId === item.id}
+                  className={`px-4 py-2 rounded text-white ${
+                    loadingId === item.id
+                      ? "bg-gray-500 cursor-not-allowed"
+                      : "bg-red-500"
+                  }`}
                 >
-                  Eliminar
+                  {loadingId === item.id ? "Eliminando..." : "Eliminar"}
                 </button>
               </li>
             ))}
           </ul>
           <div className="mt-6">
-            <h2 className="text-2xl font-bold">
-              Total: ${calculateTotal()}
-            </h2>
+            <h2 className="text-2xl font-bold">Total: ${calculateTotal()}</h2>
             <button className="mt-4 px-6 py-2 bg-blue-500 text-white rounded">
               Proceder al Pago
             </button>
@@ -59,5 +81,5 @@ export default function CartPage() {
         </div>
       )}
     </div>
-  );
+  )
 }
