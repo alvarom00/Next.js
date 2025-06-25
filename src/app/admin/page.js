@@ -1,14 +1,19 @@
-"use client";
-import { useRouter } from "next/navigation";
+import Link from 'next/link'
+import { ProductsTable } from './components/ProductsTable'
 
-export default function AdminPage() {
-    const router = useRouter();
+export default async function AdminPage() {
+    const products = await fetch("http://localhost:3000/api/products/all").then((res) => res.json())
 
     return (
         <>
+        <div className="flex flex-col gap-5 items-center justify-center">
             <p className="mt-4 text-lg max-w-lg">Modo administrador</p>
+            <Link className='bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600' href="/admin/create">
+                Crear nuevo producto
+            </Link>
 
-            <button className="mt-4 bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => router.back()}>Volver</button>
+            <ProductsTable products={products} />
+        </div>
         </>
     )
 }
